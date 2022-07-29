@@ -99,6 +99,20 @@ def get_parser():
         help="Path to save K-means model",
     )
 
+    #model arguments
+    parser.add_argument(
+        "--mode",
+        type=str,
+        default='classic',
+        help="How load data and model: classic/huggingface-yt/chpt-yt.",
+    )
+    parser.add_argument(
+        "--norm",
+        type=str,
+        help="Did you normalize the model during training? true/false",
+        default='false',
+    )
+
     # Leftovers
     parser.add_argument(
         "--seed",
@@ -161,6 +175,8 @@ def main(args, logger):
                 manifest_path=args.manifest_path,
                 sample_pct=args.sample_pct,
                 flatten=True,
+                norm=args.norm,
+                mode=args.mode,
             )
             if not args.out_features_path
             else get_and_dump_features(
