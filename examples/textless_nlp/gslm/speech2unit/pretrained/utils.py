@@ -13,7 +13,6 @@ import yt.wrapper
 import numpy as np
 from transformers import Wav2Vec2Processor, HubertModel, Wav2Vec2FeatureExtractor
 import soundfile as sf
-import sox
 
 import torch
 import torch.nn.functional as F
