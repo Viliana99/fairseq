@@ -45,7 +45,7 @@ def get_feature_reader(feature_type):
 
 
 def get_feature_iterator(
-    feature_type, checkpoint_path, layer, manifest_path, sample_pct, norm, mode='classic'
+    feature_type, checkpoint_path, layer, manifest_path, sample_pct, yt_token, norm, mode='classic'
 ):
     if mode == 'classic':
         feature_reader_cls = get_feature_reader(feature_type)
@@ -71,9 +71,6 @@ def get_feature_iterator(
                     feats = reader.get_feats(file_path)
                     yield feats.cpu().numpy()
     else:
-        f = open('/home/viliana-dev/.yt/token')
-        yt_token = f.read().strip()
-        f.close()
         yt_client = yt.wrapper.YtClient('hahn', token=yt_token)
         num_files = yt_client.row_count(manifest_path)
 
@@ -120,7 +117,7 @@ def get_feature_iterator(
 
 
 def get_features(
-    feature_type, checkpoint_path, layer, manifest_path, sample_pct, flatten, norm, mode
+    feature_type, checkpoint_path, layer, manifest_path, sample_pct, flatten, yt_token, norm, mode
 ):
     generator, num_files = get_feature_iterator(
         feature_type=feature_type,
@@ -128,6 +125,7 @@ def get_features(
         layer=layer,
         manifest_path=manifest_path,
         sample_pct=sample_pct,
+        yt_token=yt_token,
         norm=norm,
         mode=mode
     )
