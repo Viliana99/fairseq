@@ -79,8 +79,13 @@ def get_parser():
     parser.add_argument(
         "--norm",
         type=str,
-        help="Did you normalize the model during training? (only for hugging face model) true/false",
+        help="Did you normalize the model during training? true/false",
         default='false',
+    )
+    parser.add_argument(
+        "--yt_token",
+        type=str,
+        help="Your yt_token",
     )
     parser.add_argument(
         "--out_quantized_file_path",
@@ -109,6 +114,7 @@ def main(args, logger):
                 manifest_path=args.manifest_path,
                 sample_pct=1.0,
                 flatten=False,
+                yt_token=args.yt_token,
                 norm=args.norm,
                 mode=args.mode,
             )
@@ -120,6 +126,7 @@ def main(args, logger):
                 manifest_path=args.manifest_path,
                 sample_pct=1.0,
                 flatten=False,
+                yt_token=args.yt_token,
                 norm=args.norm,
                 mode=args.mode,
             )
@@ -136,14 +143,19 @@ def main(args, logger):
     kmeans_model.verbose = False
     
     def huberts_utterance(phonemes):
-        phones = [{'phone': str(phonemes[0])}]
-        last = phonemes[0]
-        for i in phonemes[1:]:
-            if i == last:
-                continue
-            phones.append({'phone': str(i)})
-            last = i
-        return {'words': [{'phones': phones, 'text': ""}]}
+        tmp = []
+        for i in phonemes:
+            tmp.append(str(i))
+        return ' '.join(tmp)
+
+        #phones = [{'phone': str(phonemes[0])}]
+        #last = phonemes[0]
+        #for i in phonemes[1:]:
+        #    if i == last:
+        #        continue
+        #    phones.append({'phone': str(i)})
+        #    last = i
+        #return {'words': [{'phones': phones, 'text': ""}]}
 
     if args.mode == 'classic':
         _, fnames, _ = get_audio_files(args.manifest_path)
