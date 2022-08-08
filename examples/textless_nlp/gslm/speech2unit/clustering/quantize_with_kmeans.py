@@ -168,10 +168,7 @@ def main(args, logger):
             {'name': 'ID', 'type_v3': {'type_name': 'optional', 'item': 'utf8'}},
             {'name': 'huberts_phonemes', 'type_v3': {'type_name': 'optional', 'item': 'yson'}}
         ]
-        f = open('/home/viliana-dev/.yt/token')
-        yt_token = f.read().strip()
-        f.close()
-        yt_client = yt.wrapper.YtClient('hahn', token=yt_token)
+        yt_client = yt.wrapper.YtClient('hahn', token=args.yt_token,)
         yt_client.create_table(args.out_quantized_file_path, attributes={"schema": schema})
 
         def row_processor(source_rows: yt.wrapper.format.RowsIterator, n_rows: int) -> Iterable:
